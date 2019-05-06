@@ -12,10 +12,7 @@ b = [{1, 2}, {}, {}]
 
 
 def h1(lst):
-    for d in lst:
-        if d:
-            return False
-    return True
+    return not any(e for e in lst)
 
 
 assert h1(a) is True
@@ -56,12 +53,7 @@ expected = [10, 11, 12]
 
 
 def h3(lst):
-    res, highest = 0, 0
-    for i, e in enumerate(lst):
-        if sum(e) > res:
-            highest = i
-            res = sum(e)
-    return lst[highest]
+    return max([(l, sum(l)) for l in lst], key=lambda x: x[1])[0]
 
 
 assert h3(lst) == expected
@@ -135,7 +127,7 @@ expected = 2
 
 
 def h7(lst):
-    return sum(1 for e in lst if len(e) > 2 and e[0] == e[-1])
+    return sum(1 for e in lst if len(e) >= 2 and e[0] == e[-1])
 
 
 assert h7(lst) == expected
@@ -170,7 +162,7 @@ expected = [(10, 20, 100), (40, 50, 100), (70, 80, 100)]
 
 
 def h9(lst):
-    return [(t[0], t[1], 100) for t in lst]
+    return [t[:-1] + (100,) for t in lst]
 
 
 assert h9(lst) == expected
@@ -231,16 +223,18 @@ assert id(h12(s)) != expected
 """
 
 s = {1, 2, 3}
+s2 = {1, 2}
 item = 3
 expected = {1, 2}
 
 
 def h13(s, item):
-    s.remove(item)
+    s.discard(item)
     return s
 
 
 assert h13(s, item) == expected
+assert h13(s2, item) == expected
 
 
 """
@@ -273,16 +267,19 @@ ad
 bc
 bd
 """
-
 dct = {'1': ['a', 'b'], '2': ['c', 'd']}
+dct2 = {'1': ['a', 'b'], '2': ['c', 'd', 'e'], '3': ['g']}
 expected = ['ac', 'ad', 'bc', 'bd']
+expected2 = ['acg', 'adg', 'aeg', 'bcg', 'bdg', 'beg']
 
 
 def h15(dct):
-    return [f"{x}{y}" for x in dct['1'] for y in dct['2']]
+    from itertools import product
+    return [''.join(c) for c in product(*dct.values())]
 
 
 assert h15(dct) == expected
+assert h15(dct2) == expected2
 
 """
 16. Write a Python program to create a dictionary from a string.
