@@ -12,7 +12,7 @@ Expected Output :
 Member name: Albania
 Member value: 355
 """
-from enum import Enum
+from enum import Enum, IntEnum
 
 
 class SampleEnum(Enum):
@@ -60,8 +60,18 @@ Antarctica
 """
 
 
+class SampleEnum2(IntEnum):
+    Afghanistan = 93
+    Albania = 355
+    Algeria = 213
+    Andorra = 376
+    Angola = 244
+    Antarctica = 672
+
+
 def h3():
-    pass
+    for c in sorted(SampleEnum2):
+        yield c.name
 
 
 """
@@ -72,7 +82,8 @@ Expected output:
 
 
 def h4():
-    pass
+    for c in SampleEnum:
+        yield c.value
 
 
 """
@@ -82,8 +93,9 @@ Expected Output:
 """
 
 
-def h5():
-    pass
+def h5(dct):
+    from collections import Counter
+    return Counter(dct).most_common(4)
 
 
 """
@@ -93,8 +105,14 @@ defaultdict(, {'VII': [1], 'V': [1, 2], 'VI': [1, 2, 3]})
 """
 
 
-def h6():
-    pass
+def h6(classes):
+    from collections import defaultdict
+    class_roll_number = defaultdict(list)
+
+    for class_name, roll_id in classes:
+        class_roll_number[class_name].append(roll_id)
+
+    return class_roll_number
 
 
 """
@@ -113,8 +131,9 @@ Counter({'VI': 3, 'V': 2, 'VII': 1})
 """
 
 
-def h7():
-    pass
+def h7(students):
+    from collections import Counter
+    return Counter(name for name, _ in students)
 
 
 """
@@ -128,8 +147,19 @@ Angola = 244
 """
 
 
+class Countries(Enum):
+    Afghanistan = 93
+    Albania = 355
+    Algeria = 213
+    Andorra = 376
+    Angola = 244
+    India = 355
+    USA = 213
+
+
 def h8():
-    pass
+    for country in Countries:
+        yield country.name, country.value
 
 
 """
@@ -150,8 +180,17 @@ Angola 244
 """
 
 
-def h9():
-    pass
+def h9(dct, reverse=False):
+    from collections import OrderedDict
+    new_dict = OrderedDict(dct.items())
+
+    if reverse:
+        print('In reverse order:')
+        for key, value in reversed(new_dict.items()):
+            yield key, value
+    else:
+        for key, value in new_dict.items():
+            yield key, value
 
 
 """
@@ -162,8 +201,12 @@ Expected output:
 """
 
 
-def h10():
-    pass
+def h10(dct):
+    from collections import defaultdict
+    d = defaultdict(list)
+    for k, v in dct:
+        d[k].append(v)
+    return sorted(d.items())
 
 
 """
@@ -172,8 +215,8 @@ Expected Output: False
 """
 
 
-def h11():
-    pass
+def h11(l1, l2):
+    return l1 == l2
 
 
 """
@@ -187,8 +230,11 @@ Expected Output:
 """
 
 
-def h12():
-    pass
+def h12(lst):
+    from array import array
+    my_array = array('i', lst)
+    for i in my_array:
+        yield i
 
 
 """
@@ -199,8 +245,13 @@ Expected Output:
 """
 
 
-def h13():
-    pass
+def h13(a):
+    sign = 'I'
+    if isinstance(a[0], float) or isinstance(a[1], float):
+        sign = 'f'
+    from array import array
+    arr = array(sign, a)
+    return arr.itemsize
 
 
 """
@@ -211,8 +262,10 @@ Array buffer start address in memory and number of elements.
 """
 
 
-def h14():
-    pass
+def h14(lst):
+    from array import array
+    num_array = array('i', lst)
+    return num_array.buffer_info()
 
 
 """
@@ -223,8 +276,10 @@ Length of the array is:
 """
 
 
-def h15():
-    pass
+def h15(lst):
+    from array import array
+    num_array = array('i', lst)
+    return len(num_array)
 
 
 """
@@ -237,8 +292,11 @@ Array to list:
 """
 
 
-def h16():
-    pass
+def h16(lst):
+    from array import array
+    array_num = array('i', lst)
+    num_list = array_num.tolist()
+    return num_list
 
 
 """
@@ -250,8 +308,12 @@ Array of bytes: b'010000000200000003000000040000000500000006000000'
 """
 
 
-def h17():
-    pass
+def h17(lst):
+    import binascii
+    from array import array
+    x = array('i', lst)
+    b = binascii.hexlify(x.tobytes())
+    return b
 
 
 """
@@ -263,8 +325,18 @@ array2: array('i', [7, 8, 9, 10])
 """
 
 
-def h18():
-    pass
+def h18(lst):
+    res = []
+    from array import array
+    import binascii
+    array1 = array('i', lst)
+    res.append('array1: {}'.format(array1))
+    as_bytes = array1.tobytes()
+    res.append('Bytes: {}'.format(binascii.hexlify(as_bytes)))
+    array2 = array('i')
+    array2.frombytes(as_bytes)
+    res.append('array2: {}'.format(array2))
+    return res
 
 
 """
@@ -276,8 +348,12 @@ Expected Output:
 """
 
 
-def h19():
-    pass
+def h19(elements):
+    import heapq
+    heap = []
+    for e in reversed(elements):
+        heapq.heappush(heap, e)
+    return heap
 
 
 """
@@ -297,8 +373,13 @@ Pop the smallest item in the heap:
 """
 
 
-def h20():
-    pass
+def h20(elements):
+    import heapq
+    heap = []
+    for e in reversed(elements):
+        heapq.heappush(heap, e)
+    heapq.heappop(heap)
+    return heap
 
 
 """
@@ -316,8 +397,13 @@ Using heappushpop push item on the heap and return the smallest item.
 """
 
 
-def h21():
-    pass
+def h21(elements):
+    import heapq
+    heap = []
+    for e in reversed(elements):
+        heapq.heappush(heap, e)
+    heapq.heappushpop(heap, ('V', 6))
+    return heap
 
 
 """
@@ -328,8 +414,12 @@ Expected Output:
 """
 
 
-def h22():
-    pass
+def h22(h):
+    import heapq
+    heap = []
+    for value in h:
+        heapq.heappush(heap, value)
+    return [heapq.heappop(heap) for _ in range(len(heap))]
 
 
 """
@@ -341,8 +431,9 @@ Expected Output:
 """
 
 
-def h23():
-    pass
+def h23(h):
+    import heapq
+    return heapq.nlargest(2, h), heapq.nsmallest(3, h)
 
 
 """
@@ -354,8 +445,10 @@ Expected Output:
 """
 
 
-def h24():
-    pass
+def h24(a, x):
+    import bisect
+    i = bisect.bisect_right(a, x)
+    return i
 
 
 """
@@ -367,8 +460,10 @@ Expected Output:
 """
 
 
-def h25():
-    pass
+def h25(a, x):
+    import bisect
+    i = bisect.bisect_right(a, x)
+    return i
 
 
 """
@@ -381,12 +476,16 @@ Sorted List:
 """
 
 
-def h26():
-    pass
+def h26(lst):
+    import bisect
+    sorted_list = []
+    for i in lst:
+        bisect.insort(sorted_list, i)
+    return sorted_list
 
 
 """
-27. a Python program to create a queue and display all the members and size
+27. Write a Python program to create a queue and display all the members and size
 of the queue.
 Expected Output:
 Members of the queue:
@@ -396,8 +495,17 @@ Size of the queue:
 """
 
 
-def h27():
-    pass
+def h27(n):
+    res = []
+    import queue
+    q = queue.Queue()
+    for x in range(n):
+        q.put(x)
+    y = z = q.qsize()
+
+    for n in list(q.queue):
+        res.append(n)
+    return res, q.qsize()
 
 
 """
@@ -408,8 +516,13 @@ False
 """
 
 
-def h28():
-    pass
+def h28(n):
+    import queue
+    p = queue.Queue()
+    q = queue.Queue()
+    for x in range(n):
+        q.put(x)
+    return p.empty(), q.empty()
 
 
 """
@@ -419,8 +532,15 @@ Expected Output:
 """
 
 
-def h29():
-    pass
+def h29(n):
+    import queue
+    res = []
+    q = queue.Queue()
+    for x in range(n):
+        q.put(str(x))
+    while not q.empty():
+        res.append(q.get())
+    return res
 
 
 """
@@ -430,5 +550,12 @@ Expected Output:
 """
 
 
-def h30():
-    pass
+def h30(n):
+    import queue
+    res = []
+    q = queue.LifoQueue()
+    for x in range(n):
+        q.put(str(x))
+    while not q.empty():
+        res.append(q.get())
+    return res
